@@ -14,10 +14,10 @@ namespace Gallerize {
 	[COMServerAssociation(AssociationType.AllFiles)]
 	[COMServerAssociation(AssociationType.Directory)]
 	class GallerizeExtension : SharpContextMenu {
-		protected Gallerize gallerize { get; private set; }
+		protected Gallerize Gallerize { get; private set; }
 
 		public GallerizeExtension() {
-			this.gallerize = new Gallerize();
+			this.Gallerize = new Gallerize();
 		}
 
 		protected override bool CanShowMenu() {
@@ -27,8 +27,18 @@ namespace Gallerize {
 		protected override ContextMenuStrip CreateMenu() {
 			var menu = new ContextMenuStrip();
 
-			var files = SelectedItemPaths.Select(path => new FileInfo(path, File.GetAttributes(path))).ToList();
+			var files = SelectedItemPaths
+				.Select(path => new FileInfo(path, File.GetAttributes(path)))
+				.Where(file => file.IsDirectory || file.IsImage)
+				.ToList();
+
+			var mainItem = new ToolStripMenuItem {
+				Text = "Gallerize",
+			};
+			menu.Items.Add(mainItem);
+
 			if (files.Count == 0) {
+				mainItem.Enabled = false;
 				return menu;
 			}
 
@@ -38,7 +48,7 @@ namespace Gallerize {
 				var item = new ToolStripMenuItem {
 					Text = text
 				};
-				item.Click += (sender, e) => this.gallerize.Exec(files, recurse);
+				item.Click += (sender, e) => this.Gallerize.Exec(files, recurse);
 				dropDown.Items.Add(item);
 			};
 
@@ -48,25 +58,21 @@ namespace Gallerize {
 					addItem($"Directory \"{file.Name}\"", false);
 					addItem($"Directory \"{file.Name}\" (with subdirectories)", false);
 				} else {
-					addItem($"File \"{file.Name}\"", false);
+					addItem($"Image \"{file.Name}\"", false);
 				}
 			} else {
 				var hasDirectories = files.Any(f => f.IsDirectory);
 				var hasFiles = files.Any(f => !f.IsDirectory);
 				if (hasDirectories) {
-					var label = hasFiles ? "files and directories" : "directories";
+					var label = hasFiles ? "images and directories" : "directories";
 					addItem(files.Count + " " + label, false);
 					addItem(files.Count + " " + label + " (with subdirectories)", true);
 				} else {
-					addItem(files.Count + " files", false);
+					addItem(files.Count + " images", false);
 				}
 			}
 
-			var mainItem = new ToolStripMenuItem {
-				Text = "Gallerize",
-			};
 			mainItem.DropDown = dropDown;
-			menu.Items.Add(mainItem);
 			return menu;
 		}
 	}
