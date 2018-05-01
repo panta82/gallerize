@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using Gallerize.Models;
 using RazorEngine;
@@ -9,6 +10,9 @@ using RazorEngine.Templating;
 
 namespace Gallerize {
 	public class Gallerize {
+		const string TEMPLATE_NAME = "template.cshtml";
+		const string ASSETS_DIRECTORY_NAME = "Assets";
+
 		public class ExecuteResult {
 			public string TempFilename { get; set; }
 			public string HTML { get; set; }
@@ -26,6 +30,13 @@ namespace Gallerize {
 				Groups = groups,
 				TempFilename = filename
 			};
+		}
+
+		public string GetEmbeddedTemplate() {
+			var assembly = Assembly.GetCallingAssembly();
+			var stream = assembly.GetManifestResourceStream($"Gallerize.{ASSETS_DIRECTORY_NAME}.{TEMPLATE_NAME}");
+			var template = new StreamReader(stream).ReadToEnd();
+			return template;
 		}
 
 		public IList<GalleryGroup> GenerateGroups(IList<GalleryItem> items, bool recurse) {
@@ -89,12 +100,13 @@ namespace Gallerize {
 		}
 
 		public string GenerateHTML(IList<GalleryGroup> groups) {
-			var templateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Views\\index.cshtml");
-			string template = File.ReadAllText(templateFile);
+			// Note: this will be used only for debugging. Actual content will be read as an embedded resource.
+			var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ASSETS_DIRECTORY_NAME, TEMPLATE_NAME);
+			string template = this.GetEmbeddedTemplate();
 			var data = new ViewData {
 				Groups = groups
 			};
-			var result = Engine.Razor.RunCompile(new LoadedTemplateSource(template, templateFile), "index", typeof(ViewData), data);
+			var result = Engine.Razor.RunCompile(new LoadedTemplateSource(template, templatePath), "index", typeof(ViewData), data);
 			return result;
 		}
 

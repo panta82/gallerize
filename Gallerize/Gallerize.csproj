@@ -76,10 +76,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Gallerize.key.snk" />
+    <EmbeddedResource Include="Assets\template.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="packages.config" />
-    <None Include="Views\index.cshtml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

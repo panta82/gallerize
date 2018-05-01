@@ -45,7 +45,13 @@ namespace Gallerize {
 					Text = text
 				};
 				item.Click += (sender, e) => {
-					gallerize.Execute(items, recurse);
+					this.Log($"Calling Execute with {items.Count} items, recurse = {recurse}");
+					try {
+						gallerize.Execute(items, recurse);
+					}
+					catch (Exception ex) {
+						this.LogError("Failed to execute", ex);
+					}
 				};
 				dropDown.Items.Add(item);
 			};
