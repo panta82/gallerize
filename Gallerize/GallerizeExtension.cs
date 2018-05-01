@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Gallerize.Models;
 using SharpShell.Attributes;
 using SharpShell.SharpContextMenu;
 
@@ -14,12 +15,6 @@ namespace Gallerize {
 	[COMServerAssociation(AssociationType.AllFiles)]
 	[COMServerAssociation(AssociationType.Directory)]
 	class GallerizeExtension : SharpContextMenu {
-		protected Gallerize Gallerize { get; private set; }
-
-		public GallerizeExtension() {
-			this.Gallerize = new Gallerize();
-		}
-
 		protected override bool CanShowMenu() {
 			return true;
 		}
@@ -27,8 +22,8 @@ namespace Gallerize {
 		protected override ContextMenuStrip CreateMenu() {
 			var menu = new ContextMenuStrip();
 
-			var files = SelectedItemPaths
-				.Select(path => new FileInfo(path, File.GetAttributes(path)))
+			var items = SelectedItemPaths
+				.Select(path => GalleryItem.FromFilePath(path))
 				.Where(file => file.IsDirectory || file.IsImage)
 				.ToList();
 
@@ -37,7 +32,7 @@ namespace Gallerize {
 			};
 			menu.Items.Add(mainItem);
 
-			if (files.Count == 0) {
+			if (items.Count == 0) {
 				mainItem.Enabled = false;
 				return menu;
 			}
@@ -48,12 +43,15 @@ namespace Gallerize {
 				var item = new ToolStripMenuItem {
 					Text = text
 				};
-				item.Click += (sender, e) => this.Gallerize.Exec(files, recurse);
+				item.Click += (sender, e) => {
+					var gallerize = new Gallerize(items, recurse);
+					gallerize.Execute();
+				};
 				dropDown.Items.Add(item);
 			};
 
-			if (files.Count == 1) {
-				var file = files[0];
+			if (items.Count == 1) {
+				var file = items[0];
 				if (file.IsDirectory) {
 					addItem($"Directory \"{file.Name}\"", false);
 					addItem($"Directory \"{file.Name}\" (with subdirectories)", false);
@@ -61,14 +59,14 @@ namespace Gallerize {
 					addItem($"Image \"{file.Name}\"", false);
 				}
 			} else {
-				var hasDirectories = files.Any(f => f.IsDirectory);
-				var hasFiles = files.Any(f => !f.IsDirectory);
+				var hasDirectories = items.Any(f => f.IsDirectory);
+				var hasFiles = items.Any(f => !f.IsDirectory);
 				if (hasDirectories) {
 					var label = hasFiles ? "images and directories" : "directories";
-					addItem(files.Count + " " + label, false);
-					addItem(files.Count + " " + label + " (with subdirectories)", true);
+					addItem(items.Count + " " + label, false);
+					addItem(items.Count + " " + label + " (with subdirectories)", true);
 				} else {
-					addItem(files.Count + " images", false);
+					addItem(items.Count + " images", false);
 				}
 			}
 
