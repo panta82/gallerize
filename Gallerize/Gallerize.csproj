@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\GalleryGroup.cs" />
     <Compile Include="Models\GalleryItem.cs" />
     <Compile Include="Gallerize.cs" />
     <Compile Include="GallerizeExtension.cs" />

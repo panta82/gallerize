@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace Gallerize.Models {
 	public class ViewData {
-		public IList<GalleryItem> Items { get; set; }
-		public bool Recurse { get; set; }
+		public IList<GalleryGroup> Groups { get; set; }
 	}
 }

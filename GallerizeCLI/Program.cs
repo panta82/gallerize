@@ -14,10 +14,14 @@ namespace GallerizeCLI {
 				System.Environment.Exit(1);
 			}
 
-			var items = args.Select(path => GalleryItem.FromFilePath(path)).ToList();
-			var gallerize = new Gallerize.Gallerize(items, false);
-			var html = gallerize.GenerateHTML();
-			Console.WriteLine(html);
+			var items = args.Select(path => GalleryItem.FromPath(path)).ToList();
+			var gallerize = new Gallerize.Gallerize();
+			var result = gallerize.Execute(items, true);
+
+			Console.WriteLine(result.HTML);
+			Console.WriteLine("========================================================================================");
+			Console.WriteLine("Written to " + result.TempFilename);
+
 			Console.ReadLine();
 		}
 	}

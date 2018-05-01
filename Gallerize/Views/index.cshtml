@@ -1,20 +1,36 @@
-﻿@model Gallerize.Models.ViewData
+﻿@using RazorEngine
+@using Gallerize.Models
+@model Gallerize.Models.ViewData
 
 <!DOCTYPE HTML>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Gallerize: </title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Gallerize: </title>
 </head>
 <body>
+	<header>
+		<h1>Gallerize</h1>
+		<h2></h2>
+	</header>
+	<section>
+		@foreach (var group in Model.Groups) {
+			<div class="group">
+				@if (group.Name != null) {
+					<div class="group-header">
+						<h3>@group.Name</h3>
+						<h4><a href="file://@group.Path">@group.Path</a></h4>
+					</div>
+				}
 
-    <header>
-        <h1>Gallerize</h1>
-        <h2></h2>
-    </header>
-
-    <section>
-    </section>
-
+				@foreach (var item in group.Items) {
+					<div class="item">
+						<img src="@item.Path" alt="@item.Name" />
+						<p>@item.Name</p>
+					</div>
+				}
+			</div>
+		}
+	</section>
 </body>
 </html>

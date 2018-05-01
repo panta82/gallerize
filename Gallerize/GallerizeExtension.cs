@@ -22,9 +22,9 @@ namespace Gallerize {
 		protected override ContextMenuStrip CreateMenu() {
 			var menu = new ContextMenuStrip();
 
-			var items = SelectedItemPaths
-				.Select(path => GalleryItem.FromFilePath(path))
-				.Where(file => file.IsDirectory || file.IsImage)
+			var items = this.SelectedItemPaths
+				.Select(path => GalleryItem.FromPath(path))
+				.Where(item => item.IsValid)
 				.ToList();
 
 			var mainItem = new ToolStripMenuItem {
@@ -37,6 +37,7 @@ namespace Gallerize {
 				return menu;
 			}
 
+			var gallerize = new Gallerize();
 			var dropDown = new ToolStripDropDown();
 
 			Action<string, bool> addItem = (text, recurse) => {
@@ -44,8 +45,7 @@ namespace Gallerize {
 					Text = text
 				};
 				item.Click += (sender, e) => {
-					var gallerize = new Gallerize(items, recurse);
-					gallerize.Execute();
+					gallerize.Execute(items, recurse);
 				};
 				dropDown.Items.Add(item);
 			};

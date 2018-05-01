@@ -9,33 +9,103 @@ using RazorEngine.Templating;
 
 namespace Gallerize {
 	public class Gallerize {
-		public IList<GalleryItem> Items { get; private set; }
-		public bool Recurse { get; private set; }
-
-		public Gallerize(IList<GalleryItem> items, bool recurse) {
-			this.Items = items;
-			this.Recurse = recurse;
+		public class ExecuteResult {
+			public string TempFilename { get; set; }
+			public string HTML { get; set; }
+			public IList<GalleryGroup> Groups { get; set; }
 		}
 
-		private string GetTargetPath() {
-			return System.IO.Path.GetTempFileName();
+		public ExecuteResult Execute(IList<GalleryItem> items, bool recurse) {
+			var groups = this.GenerateGroups(items, recurse);
+			var html = this.GenerateHTML(groups);
+			var filename = this.SaveToTempFile(html);
+			this.OpenFile(filename);
+
+			return new ExecuteResult {
+				HTML = html,
+				Groups = groups,
+				TempFilename = filename
+			};
 		}
 
-		public void Execute() {
-			var html = this.GenerateHTML();
-			var fileList = string.Join("\n", this.Items.Select(f => f.Path));
-			MessageBox.Show(fileList + "\n\n" + (this.Recurse ? "recurse" : "no recurse"));
+		public IList<GalleryGroup> GenerateGroups(IList<GalleryItem> items, bool recurse) {
+			var results = new List<GalleryGroup>();
+			var currentGroup = new GalleryGroup {
+				Name = null,
+				Path = null
+			};
+			var firstPass = true;
+
+			var pendingDirs = new Queue<GalleryItem>();
+
+			while (true) {
+				// Order items, so that all files are nicely sorted
+				items.OrderBy(item => item.Name);
+
+				// Separate directories from files
+				foreach (var item in items) {
+					if (item.IsDirectory) {
+						pendingDirs.Enqueue(item);
+					} else {
+						currentGroup.AddItem(item);
+					}
+				}
+
+				// Only add groups with files we care about
+				if (currentGroup.HasItems) {
+					results.Add(currentGroup);
+					currentGroup = new GalleryGroup();
+				}
+
+				if (pendingDirs.Count == 0) {
+					// We are done
+					break;
+				}
+
+				// Load next dir
+				var nextDir = pendingDirs.Dequeue();
+				currentGroup.Name = nextDir.Name;
+				currentGroup.Path = nextDir.Path;
+
+				items = new List<GalleryItem>();
+				if (firstPass || recurse) {
+					// Only dig into directories the first time or if we are recursing
+					foreach (var path in Directory.GetDirectories(nextDir.Path)) {
+						items.Add(GalleryItem.FromPath(path, true));
+					}
+				}
+
+				foreach (var path in Directory.GetFiles(nextDir.Path)) {
+					var item = GalleryItem.FromPath(path, false);
+					if (item.IsValid) {
+						items.Add(item);
+					}
+				}
+
+				firstPass = false;
+			}
+
+			return results;
 		}
 
-		public string GenerateHTML() {
+		public string GenerateHTML(IList<GalleryGroup> groups) {
 			var templateFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Views\\index.cshtml");
 			string template = File.ReadAllText(templateFile);
 			var data = new ViewData {
-				Items = this.Items,
-				Recurse = this.Recurse
+				Groups = groups
 			};
-			var result = Engine.Razor.RunCompile(new LoadedTemplateSource(template, templateFile), "index", null, data);
+			var result = Engine.Razor.RunCompile(new LoadedTemplateSource(template, templateFile), "index", typeof(ViewData), data);
 			return result;
+		}
+
+		public string SaveToTempFile(string html) {
+			var targetFileName = Path.GetTempFileName() + ".html";
+			File.WriteAllText(targetFileName, html);
+			return targetFileName;
+		}
+
+		public void OpenFile(string filename) {
+			System.Diagnostics.Process.Start(filename);
 		}
 	}
 }
