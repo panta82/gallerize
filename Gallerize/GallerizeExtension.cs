@@ -49,6 +49,9 @@ namespace Gallerize {
 					try {
 						gallerize.Execute(items, recurse);
 					}
+					catch (Gallerize.GallerizeException ex) {
+						MessageBox.Show("Failed", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					}
 					catch (Exception ex) {
 						this.LogError("Failed to execute", ex);
 					}

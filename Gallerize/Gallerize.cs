@@ -13,6 +13,16 @@ namespace Gallerize {
 		const string TEMPLATE_NAME = "template.cshtml";
 		const string ASSETS_DIRECTORY_NAME = "Assets";
 
+		public class GallerizeException : Exception {
+			public GallerizeException(string message): base(message) {
+			}
+		}
+
+		public class NoSuitableFilesFoundException: GallerizeException {
+			public NoSuitableFilesFoundException(): base("No suitable image files were found") {
+			}
+		}
+
 		public class ExecuteResult {
 			public string TempFilename { get; set; }
 			public string HTML { get; set; }
@@ -21,6 +31,10 @@ namespace Gallerize {
 
 		public ExecuteResult Execute(IList<GalleryItem> items, bool recurse) {
 			var groups = this.GenerateGroups(items, recurse);
+			if (groups.Count == 0) {
+				// Nothing is found. Tell the caller we will not generate an empty HTML
+				throw new NoSuitableFilesFoundException();
+			}
 			var html = this.GenerateHTML(groups);
 			var filename = this.SaveToTempFile(html);
 			this.OpenFile(filename);

@@ -16,8 +16,15 @@ namespace GallerizeCLI {
 
 			var items = args.Select(path => GalleryItem.FromPath(path)).ToList();
 			var gallerize = new Gallerize.Gallerize();
-			var result = gallerize.Execute(items, true);
-
+			Gallerize.Gallerize.ExecuteResult result = null;
+			try {
+				result = gallerize.Execute(items, true);
+			}
+			catch (Gallerize.Gallerize.GallerizeException ex) {
+				Console.Error.WriteLine("ERROR: " + ex.Message);
+				System.Environment.Exit(1);
+			}
+			
 			Console.WriteLine(result.HTML);
 			Console.WriteLine("========================================================================================");
 			Console.WriteLine("Written to " + result.TempFilename);
