@@ -39,6 +39,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_670B63296C6E43498863AA764A918CAE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_A4FA057440AB6C0FB41F73A716129D1C"
         "OwnerKey" = "8:_55034FC1667FA0729FA11D45C47DE6E7"
         "MsmSig" = "8:_UNDEFINED"
@@ -348,6 +354,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_670B63296C6E43498863AA764A918CAE"
+            {
+            "SourcePath" = "8:..\\Misc\\Icon.ico"
+            "TargetName" = "8:Icon.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_66C14A6B69B24C21B70FC186709809C0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A4FA057440AB6C0FB41F73A716129D1C"
             {
             "AssemblyRegister" = "3:1"
@@ -498,7 +524,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gallerize"
         "ProductCode" = "8:{3E60625B-E68E-4D08-BE6B-C86F092C7C13}"
-        "PackageCode" = "8:{EC64232F-613B-470E-9407-DB544CD8DEC2}"
+        "PackageCode" = "8:{6905E048-C2D1-4B56-9DD1-970D9AA9B782}"
         "UpgradeCode" = "8:{829345D4-02F9-47E6-86F3-68A54200CAFE}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -515,7 +541,7 @@
         "Keywords" = "8:gallery jpeg jpg png bmp gif image"
         "ARPCOMMENTS" = "8:Create media gallery from right-click menu"
         "ARPURLINFOABOUT" = "8:https://pantas.net/"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_670B63296C6E43498863AA764A918CAE"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -1019,7 +1045,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_DB0C9680B2B042B0B6F674AFDA58BCBB"
             {
-            "SourcePath" = "8:..\\Gallerize\\obj\\Release\\Gallerize.dll"
+            "SourcePath" = "8:..\\Gallerize\\obj\\Debug\\Gallerize.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_66C14A6B69B24C21B70FC186709809C0"

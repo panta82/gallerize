@@ -11,7 +11,8 @@ namespace GallerizeCLI {
 		static void Main(string[] args) {
 			if (args.Length < 1) {
 				Console.Error.WriteLine("You must provide at least one path to load");
-				System.Environment.Exit(1);
+				Environment.Exit(1);
+				return;
 			}
 
 			var items = args.Select(path => GalleryItem.FromPath(path)).ToList();
@@ -22,7 +23,8 @@ namespace GallerizeCLI {
 			}
 			catch (Gallerize.Gallerize.GallerizeException ex) {
 				Console.Error.WriteLine("ERROR: " + ex.Message);
-				System.Environment.Exit(1);
+				Environment.Exit(1);
+				return;
 			}
 			
 			Console.WriteLine(result.HTML);
