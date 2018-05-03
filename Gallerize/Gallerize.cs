@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Gallerize.Models;
 using RazorEngine;
+using RazorEngine.Configuration;
 using RazorEngine.Templating;
 
 namespace Gallerize {
@@ -120,7 +121,15 @@ namespace Gallerize {
 			var data = new ViewData {
 				Groups = groups
 			};
-			var result = Engine.Razor.RunCompile(new LoadedTemplateSource(template, templatePath), "index", typeof(ViewData), data);
+
+			var config = new TemplateServiceConfiguration {
+				// This will make it so that there are no staggler directories left in the TMP directory.
+				// None of the tradeoffs they warn about are super relevant in this app.
+				DisableTempFileLocking = true,
+			};
+			var service = RazorEngineService.Create(config);
+			var result = service.RunCompile(new LoadedTemplateSource(template, templatePath), "index", typeof(ViewData), data);
+
 			return result;
 		}
 

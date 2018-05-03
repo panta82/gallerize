@@ -50,7 +50,7 @@ namespace Gallerize {
 						gallerize.Execute(items, recurse);
 					}
 					catch (Gallerize.GallerizeException ex) {
-						MessageBox.Show("Failed", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+						MessageBox.Show(ex.Message, "Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					}
 					catch (Exception ex) {
 						this.LogError("Failed to execute", ex);

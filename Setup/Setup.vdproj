@@ -523,15 +523,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gallerize"
-        "ProductCode" = "8:{3E60625B-E68E-4D08-BE6B-C86F092C7C13}"
-        "PackageCode" = "8:{6905E048-C2D1-4B56-9DD1-970D9AA9B782}"
+        "ProductCode" = "8:{4EC30285-9828-4F63-A4A1-01526D7D16F8}"
+        "PackageCode" = "8:{5BB5D7F4-4BA4-4D6E-9B45-9E060AC443AF}"
         "UpgradeCode" = "8:{829345D4-02F9-47E6-86F3-68A54200CAFE}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.1.0"
         "Manufacturer" = "8:Pantas"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1045,7 +1045,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_DB0C9680B2B042B0B6F674AFDA58BCBB"
             {
-            "SourcePath" = "8:..\\Gallerize\\obj\\Debug\\Gallerize.dll"
+            "SourcePath" = "8:..\\Gallerize\\obj\\Release\\Gallerize.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_66C14A6B69B24C21B70FC186709809C0"
