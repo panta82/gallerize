@@ -3,6 +3,13 @@ using System.IO;
 using System.Linq;
 
 namespace Gallerize.Models {
+	public enum GalleryItemType {
+		Image,
+		Directory,
+		Archive,
+		Other
+	}
+
 	public class GalleryItem {
 		static readonly HashSet<string> ImageFormats = new HashSet<string> {
 			"jpg",
@@ -13,13 +20,24 @@ namespace Gallerize.Models {
 			"gif"
 		};
 
+		static readonly HashSet<string> ArchiveFormats = new HashSet<string> {
+			"zip",
+			"rar",
+			"7z",
+			"7zip",
+			"tar",
+			"gz",
+			"cbr",
+			"cbz",
+			"cb7z"
+		};
+
 		public string Path { get; set; }
 		public string Name { get; set; }
-		public bool IsDirectory { get; set; }
-		public bool IsImage { get; set; }
+		public GalleryItemType Type { get; set; }
 		public bool IsValid {
 			get {
-				return this.IsDirectory || this.IsImage;
+				return this.Type != GalleryItemType.Other;
 			}
 		}
 
@@ -39,13 +57,24 @@ namespace Gallerize.Models {
 				var attributes = File.GetAttributes(path);
 				isDirectory = attributes.HasFlag(FileAttributes.Directory);
 			}
-			item.IsDirectory = isDirectory.Value;
-
-			var extension = System.IO.Path.GetExtension(path);
-			if (extension.Length > 1) {
-				extension = extension.Substring(1);
+			if (isDirectory.Value) {
+				item.Type = GalleryItemType.Directory;
 			}
-			item.IsImage = !item.IsDirectory && ImageFormats.Contains(extension);
+			else {
+				var extension = System.IO.Path.GetExtension(path);
+				if (extension.Length > 1) {
+					extension = extension.Substring(1);
+				}
+				if (ImageFormats.Contains(extension)) {
+					item.Type = GalleryItemType.Image;
+				}
+				else if (ArchiveFormats.Contains(extension)) {
+					item.Type = GalleryItemType.Archive;
+				}
+				else {
+					item.Type = GalleryItemType.Other;
+				}
+			}
 
 			return item;
 		}

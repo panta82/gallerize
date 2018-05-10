@@ -8,6 +8,7 @@ using Gallerize.Models;
 using RazorEngine;
 using RazorEngine.Configuration;
 using RazorEngine.Templating;
+using SharpCompress.Readers;
 
 namespace Gallerize {
 	public class Gallerize {
@@ -31,7 +32,8 @@ namespace Gallerize {
 		}
 
 		public ExecuteResult Execute(IList<GalleryItem> items, bool recurse) {
-			var groups = this.GenerateGroups(items, recurse);
+			var unpackedItems = this.UnpackItems(items);
+			var groups = this.GenerateGroups(unpackedItems, recurse);
 			if (groups.Count == 0) {
 				// Nothing is found. Tell the caller we will not generate an empty HTML
 				throw new NoSuitableFilesFoundException();
@@ -70,11 +72,13 @@ namespace Gallerize {
 
 				// Separate directories from files
 				foreach (var item in items) {
-					if (item.IsDirectory) {
+					if (item.Type == GalleryItemType.Directory) {
 						pendingDirs.Enqueue(item);
-					} else {
+					}
+					else if (item.Type == GalleryItemType.Image) {
 						currentGroup.AddItem(item);
 					}
+					// Ignore archives and others
 				}
 
 				// Only add groups with files we care about
@@ -141,6 +145,43 @@ namespace Gallerize {
 
 		public void OpenFile(string filename) {
 			System.Diagnostics.Process.Start(filename);
+		}
+
+		public IList<GalleryItem> UnpackItems(IList<GalleryItem> items) {
+			var resultItems = items.Select(item => {
+				if (item.Type != GalleryItemType.Archive) {
+					return item;
+				}
+
+				var decompressedDirectory = DecompressArchiveToTempDirectory(item.Path);
+				var newItem = new GalleryItem {
+					Name = item.Name,
+					Path = decompressedDirectory,
+					Type = GalleryItemType.Directory
+				};
+				return newItem;
+			}).ToList();
+
+			return resultItems;
+		}
+
+		private string DecompressArchiveToTempDirectory(string filename) {
+			var tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+			Directory.CreateDirectory(tempDirectory);
+
+			using (Stream stream = File.OpenRead(filename))
+			using (var reader = ReaderFactory.Open(stream)) {
+				while (reader.MoveToNextEntry()) {
+					if (!reader.Entry.IsDirectory) {
+						reader.WriteEntryToDirectory(tempDirectory, new ExtractionOptions() {
+							ExtractFullPath = true,
+							Overwrite = true
+						});
+					}
+				}
+			}
+
+			return tempDirectory;
 		}
 	}
 }

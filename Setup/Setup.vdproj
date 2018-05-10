@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_07A1D095AB7666FD2147BAFF5483C2E7"
+        "OwnerKey" = "8:_DB0C9680B2B042B0B6F674AFDA58BCBB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_08DE392E67CA07364B75E51E34751D77"
         "OwnerKey" = "8:_DB0C9680B2B042B0B6F674AFDA58BCBB"
         "MsmSig" = "8:_UNDEFINED"
@@ -95,6 +101,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_239F70931F18A7374EB2356178922642"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_07A1D095AB7666FD2147BAFF5483C2E7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -230,6 +242,37 @@
         }
         "File"
         {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_07A1D095AB7666FD2147BAFF5483C2E7"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:SharpCompress, Version=0.21.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_07A1D095AB7666FD2147BAFF5483C2E7"
+                    {
+                    "Name" = "8:SharpCompress.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:SharpCompress.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_66C14A6B69B24C21B70FC186709809C0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_08DE392E67CA07364B75E51E34751D77"
             {
             "AssemblyRegister" = "3:1"
@@ -523,15 +566,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Gallerize"
-        "ProductCode" = "8:{4EC30285-9828-4F63-A4A1-01526D7D16F8}"
-        "PackageCode" = "8:{5BB5D7F4-4BA4-4D6E-9B45-9E060AC443AF}"
+        "ProductCode" = "8:{1BB9935A-5844-4916-BA47-58EAD6C7BE99}"
+        "PackageCode" = "8:{3EFEBECF-EDEE-4F89-B196-9CF6288FF3A7}"
         "UpgradeCode" = "8:{829345D4-02F9-47E6-86F3-68A54200CAFE}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.0"
+        "ProductVersion" = "8:1.2.0"
         "Manufacturer" = "8:Pantas"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

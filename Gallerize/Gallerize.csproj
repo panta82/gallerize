@@ -45,6 +45,9 @@
     <Reference Include="ServerManager, Version=2.2.0.0, Culture=neutral, processorArchitecture=x86">
       <HintPath>..\packages\SharpShellTools.2.2.0.0\lib\ServerManager.exe</HintPath>
     </Reference>
+    <Reference Include="SharpCompress, Version=0.21.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpCompress.0.21.0\lib\net45\SharpCompress.dll</HintPath>
+    </Reference>
     <Reference Include="SharpShell, Version=2.2.0.0, Culture=neutral, PublicKeyToken=f14dc899472fe6fb, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpShellTools.2.2.0.0\lib\SharpShell.dll</HintPath>
     </Reference>

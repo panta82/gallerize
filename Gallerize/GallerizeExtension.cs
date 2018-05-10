@@ -60,22 +60,26 @@ namespace Gallerize {
 			};
 
 			if (items.Count == 1) {
-				var file = items[0];
-				if (file.IsDirectory) {
-					addItem($"Directory \"{file.Name}\"", false);
-					addItem($"Directory \"{file.Name}\" (with subdirectories)", false);
-				} else {
-					addItem($"Image \"{file.Name}\"", false);
+				var item = items[0];
+				if (item.Type == GalleryItemType.Directory) {
+					addItem($"Directory \"{item.Name}\"", false);
+					addItem($"Directory \"{item.Name}\" (with subdirectories)", false);
+				}
+				else if (item.Type == GalleryItemType.Image) {
+					addItem($"Image \"{item.Name}\"", false);
+				}
+				else if (item.Type == GalleryItemType.Archive) {
+					addItem($"Archive \"{item.Name}\"", false);
 				}
 			} else {
-				var hasDirectories = items.Any(f => f.IsDirectory);
-				var hasFiles = items.Any(f => !f.IsDirectory);
+				var hasDirectories = items.Any(i => i.Type == GalleryItemType.Directory);
+				var hasFiles = items.Any(i => i.Type == GalleryItemType.Image || i.Type == GalleryItemType.Archive);
 				if (hasDirectories) {
-					var label = hasFiles ? "images and directories" : "directories";
+					var label = hasFiles ? "files and directories" : "directories";
 					addItem(items.Count + " " + label, false);
 					addItem(items.Count + " " + label + " (with subdirectories)", true);
 				} else {
-					addItem(items.Count + " images", false);
+					addItem(items.Count + " files", false);
 				}
 			}
 
