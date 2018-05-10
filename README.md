@@ -16,7 +16,7 @@ That's it.
 
 ### Installation
 
-Go to the [releases](releases) page and download the latest release.
+Go to the [releases](https://github.com/panta82/gallerize/releases) page and download the latest release.
 
 Unzip it.
 
