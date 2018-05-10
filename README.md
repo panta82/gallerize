@@ -2,6 +2,13 @@
 
 Create a media gallery straight from Windows Explorer or desktop context menu.
 
+Supported formats:
+- Image files: JPG, JPEG, PNG, GIF, BMP
+- Comic book archives: CBR, CBZ, CB7Z
+- Archives: ZIP, 7Z, RAR
+
+Archives are currently limited only to the files you select directly. Gallerize will not unpack archives that are inside directories you have selected.
+
 ### Usage:
 
 1. Right click on any file or directory or selection of items. Select Gallerize and decide whether to include subdirectories.
@@ -23,6 +30,8 @@ Unzip it.
 Run Setup.exe.
 
 You will need to approve admin rights in UAC prompt. This is because we need to install a "shell extension" that allows the right-click context menu you see on screenshots. The extension will be removed once you uninstall the program.
+
+If installer asks you to kill Windows Explorer, you can do that using the Task Manager (Ctrl+Shift+Esc). To start it again later, right-click on Start Menu icon, select "Run", then enter "explorer" in the text box.
 
 Tested on Windows 10.
 
