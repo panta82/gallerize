@@ -15,6 +15,8 @@ namespace GallerizeCLI {
 				return;
 			}
 
+			args = args.Select(str => str.Trim()).ToArray();
+
 			var items = args.Select(path => GalleryItem.FromPath(path)).ToList();
 			var gallerize = new Gallerize.Gallerize();
 			Gallerize.Gallerize.ExecuteResult result = null;

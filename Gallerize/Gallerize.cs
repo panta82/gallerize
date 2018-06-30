@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Gallerize.Lib;
 using Gallerize.Models;
 using RazorEngine;
 using RazorEngine.Configuration;
@@ -14,6 +15,8 @@ namespace Gallerize {
 	public class Gallerize {
 		const string TEMPLATE_NAME = "template.cshtml";
 		const string ASSETS_DIRECTORY_NAME = "Assets";
+
+		private IComparer<string> comparer = new NaturalComparer();
 
 		public class GallerizeException : Exception {
 			public GallerizeException(string message): base(message) {
@@ -68,10 +71,10 @@ namespace Gallerize {
 
 			while (true) {
 				// Order items, so that all files are nicely sorted
-				items.OrderBy(item => item.Name);
+				var orderedItems = items.OrderBy(item => item.Name, this.comparer);
 
 				// Separate directories from files
-				foreach (var item in items) {
+				foreach (var item in orderedItems) {
 					if (item.Type == GalleryItemType.Directory) {
 						pendingDirs.Enqueue(item);
 					}
