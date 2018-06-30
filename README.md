@@ -39,12 +39,14 @@ Tested on Windows 10.
 
 ##### 1.3.0 (2018/06/30)
 - Correctly sorts files using natural sort (so `chapter_1`, `chapter_11`, `chapter_2` are correctly sorted).
+- Smarter context menu options.
+- Better title of generated page
 
 ##### 1.2.0 (2018/05/10)
 - Added support for archives and comic books (CBR/CBZ).
 
 ##### 1.1.0 (2018/05/03)
-- First released version
+- First released version.
 
 ### License
 

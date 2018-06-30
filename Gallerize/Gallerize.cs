@@ -125,7 +125,14 @@ namespace Gallerize {
 			// Note: this will be used only for debugging. Actual content will be read as an embedded resource.
 			var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ASSETS_DIRECTORY_NAME, TEMPLATE_NAME);
 			string template = this.GetEmbeddedTemplate();
+			string prefixStr = new string(
+				groups.First().Name
+					.Substring(0, groups.Min(g => g.Name.Length))
+					.TakeWhile((c, i) => groups.All(g => g.Name[i] == c))
+					.ToArray()
+			);
 			var data = new ViewData {
+				Title = prefixStr.Length > 5 ? $"{prefixStr} - Gallerize" : "Gallerize",
 				Groups = groups
 			};
 
