@@ -19,6 +19,20 @@ namespace Gallerize {
 			return true;
 		}
 
+		private void GallerizeItems(IList<GalleryItem> items, bool recurse) {
+			var gallerize = new Gallerize();
+			this.Log($"Calling Execute with {items.Count} items, recurse = {recurse}");
+			try {
+				gallerize.Execute(items, recurse);
+			}
+			catch (Gallerize.GallerizeException ex) {
+				MessageBox.Show(ex.Message, "Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			}
+			catch (Exception ex) {
+				this.LogError("Failed to execute", ex);
+			}
+		}
+
 		protected override ContextMenuStrip CreateMenu() {
 			var menu = new ContextMenuStrip();
 
@@ -37,53 +51,37 @@ namespace Gallerize {
 				return menu;
 			}
 
-			var gallerize = new Gallerize();
-			var dropDown = new ToolStripDropDown();
-
-			Action<string, bool> addItem = (text, recurse) => {
-				var item = new ToolStripMenuItem {
-					Text = text
+			var canRecurse = items.Count > 1 && items.Any(i => i.Type == GalleryItemType.Directory);
+			if (!canRecurse) {
+				// Immediately execute, no need for submenu
+				mainItem.Click += (sender, e) => {
+					this.GallerizeItems(items, false);
 				};
-				item.Click += (sender, e) => {
-					this.Log($"Calling Execute with {items.Count} items, recurse = {recurse}");
-					try {
-						gallerize.Execute(items, recurse);
-					}
-					catch (Gallerize.GallerizeException ex) {
-						MessageBox.Show(ex.Message, "Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-					}
-					catch (Exception ex) {
-						this.LogError("Failed to execute", ex);
-					}
-				};
-				dropDown.Items.Add(item);
-			};
-
-			if (items.Count == 1) {
-				var item = items[0];
-				if (item.Type == GalleryItemType.Directory) {
-					addItem($"Directory \"{item.Name}\"", false);
-					addItem($"Directory \"{item.Name}\" (with subdirectories)", false);
-				}
-				else if (item.Type == GalleryItemType.Image) {
-					addItem($"Image \"{item.Name}\"", false);
-				}
-				else if (item.Type == GalleryItemType.Archive) {
-					addItem($"Archive \"{item.Name}\"", false);
-				}
 			} else {
-				var hasDirectories = items.Any(i => i.Type == GalleryItemType.Directory);
-				var hasFiles = items.Any(i => i.Type == GalleryItemType.Image || i.Type == GalleryItemType.Archive);
-				if (hasDirectories) {
-					var label = hasFiles ? "files and directories" : "directories";
-					addItem(items.Count + " " + label, false);
-					addItem(items.Count + " " + label + " (with subdirectories)", true);
-				} else {
-					addItem(items.Count + " files", false);
+				// Show submenu with shallow and recursive options
+				var dropDown = new ToolStripDropDown();
+				{
+					var item = new ToolStripMenuItem {
+						Text = items.Count + " items",
+					};
+					item.Click += (sender, e) => {
+						this.GallerizeItems(items, false);
+					};
+					dropDown.Items.Add(item);
 				}
+
+				{
+					var item = new ToolStripMenuItem {
+						Text = items.Count + " items (with subdirectories)",
+					};
+					item.Click += (sender, e) => {
+						this.GallerizeItems(items, true);
+					};
+					dropDown.Items.Add(item);
+				}
+				mainItem.DropDown = dropDown;
 			}
 
-			mainItem.DropDown = dropDown;
 			return menu;
 		}
 	}
